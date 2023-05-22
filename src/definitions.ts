@@ -54,7 +54,7 @@ export type EmbededRefundOptions = {
   customerReferenceNumber?: string;
   enableReceiptUi?: boolean;
   enableReversalUi?: boolean;
-  editableReversalAmountUI?: boolean;
+  editableRefundAmountUI?: boolean;
   enableUiDismiss?: boolean;
   finishTimeout?: number;
   adminPin?: string;

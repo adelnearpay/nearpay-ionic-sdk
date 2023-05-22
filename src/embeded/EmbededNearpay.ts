@@ -39,10 +39,17 @@ export class EmbededNearpay {
     onPurchaseFailed,
     onPurchaseSuccess,
   }: EmbededPurchaseOptions) {
-    // console.log(1);
+    const data = {
+      amount: amount,
+      customer_reference_number: customerReferenceNumber,
+      transaction_uuid: transactionUUID,
+      enableReceiptUi: enableReceiptUi,
+      enableReversal: enableReversalUi,
+      finishTimeout: finishTimeout,
 
-    // const { onPurchaseFailed, onPurchaseSuccess, ...optionsToPass } = options;
-    // console.log({ optionsToPass });
+      enableUiDismiss: enableUiDismiss,
+    };
+
     function callback(response: ApiResponse) {
       if (response.status === 200) {
         onPurchaseSuccess?.(response.receipts! as TransactionRecipt[]);
@@ -50,81 +57,130 @@ export class EmbededNearpay {
         onPurchaseFailed?.(PurchaseErrorMap(response));
       }
     }
-    return await this.callMethod(
-      'purchase',
-      {
-        amount,
-        customerReferenceNumber,
-        enableReceiptUi,
-        enableReversalUi,
-        enableUiDismiss,
-        finishTimeout,
-        transactionUUID,
-      },
-      callback,
-    );
+    return await this.callMethod('purchase', data, callback);
     // return await this.nearpay.purchase(options);
   }
-  // async refund(options: EmbededRefundOptions) {
-  //   const { onRefundFailed, onRefundSuccess, ...optionsToPass } = options;
-  //   function callback(response: ApiResponse) {
-  //     if (response.status === 200) {
-  //       onRefundSuccess?.(response.receipts! as TransactionRecipt[]);
-  //     } else {
-  //       onRefundFailed?.(RefundErrorMap(response));
-  //     }
-  //   }
-  //   return await this.callMethod('refund', optionsToPass, callback);
-  // }
-  // async reverse(options: EmbededReverseOptions) {
-  //   const { onReverseSuccess, onReverseFailed, ...optionsToPass } = options;
-  //   function callback(response: ApiResponse) {
-  //     if (response.status === 200) {
-  //       onReverseSuccess?.(response.receipts! as TransactionRecipt[]);
-  //     } else {
-  //       onReverseFailed?.(ReverseErrorMap(response));
-  //     }
-  //   }
-  //   return await this.callMethod('reverse', optionsToPass, callback);
-  // }
-  // async reconcile(options: EmbededReconcileOptions) {
-  //   const { onReconcileSuccess, onReconcileFailed, ...optionsToPass } = options;
-  //   function callback(response: ApiResponse) {
-  //     if (response.status === 200) {
-  //       onReconcileSuccess?.(response.receipts! as ReconciliationRecipt[]);
-  //     } else {
-  //       onReconcileFailed?.(ReconcileErrorMap(response));
-  //     }
-  //   }
-  //   return await this.callMethod('reconcile', optionsToPass, callback);
-  // }
-  // async session(options: EmbededSessionOptions) {
-  //   const { onSessionClose, onSessionFailed, onSessionOpen, ...optionsToPass } =
-  //     options;
-  //   function callback(response: ApiResponse) {
-  //     if (response.status === 200) {
-  //       onSessionOpen !== undefined &&
-  //         onSessionOpen(response.receipts as TransactionRecipt[]);
-  //     } else if (response.status === 500) {
-  //       onSessionClose !== undefined && onSessionClose(response.session!);
-  //     } else {
-  //       onSessionFailed !== undefined &&
-  //         onSessionFailed(SessionErrorMap(response));
-  //     }
-  //   }
-  //   return await this.callMethod('reconcile', optionsToPass, callback);
-  // }
-  // async logout() {
-  //   // const { onReconcileSuccess, onReconcileFailed, ...optionsToPass } = options;
-  //   // function callback(response: ApiResponse) {
-  //   //   if (response.status === 200) {
-  //   //     onReconcileSuccess?.(response.receipts! as ReconciliationRecipt[]);
-  //   //   } else {
-  //   //     onReconcileFailed?.(ReconcileErrorMap(response));
-  //   //   }
-  //   // }
-  //   return await this.callMethod('reconcile', {}, () => {});
-  // }
+  async refund({
+    amount,
+    originalTransactionUUID,
+    adminPin,
+    customerReferenceNumber,
+    editableRefundAmountUI,
+    enableReceiptUi,
+    enableReversalUi,
+    enableUiDismiss,
+    finishTimeout,
+    transactionUUID,
+    onRefundFailed,
+    onRefundSuccess,
+  }: EmbededRefundOptions) {
+    const data = {
+      amount: amount,
+      original_transaction_uuid: originalTransactionUUID,
+      customer_reference_number: customerReferenceNumber,
+      transaction_uuid: transactionUUID,
+      enableReceiptUi: enableReceiptUi,
+      enableReversal: enableReversalUi,
+      enableEditableRefundAmountUi: editableRefundAmountUI,
+      finishTimeout: finishTimeout,
+      adminPin: adminPin,
+      enableUiDismiss: enableUiDismiss,
+    };
+
+    function callback(response: ApiResponse) {
+      if (response.status === 200) {
+        onRefundSuccess?.(response.receipts! as TransactionRecipt[]);
+      } else {
+        onRefundFailed?.(RefundErrorMap(response));
+      }
+    }
+
+    return await this.callMethod('refund', data, callback);
+  }
+
+  async reverse({
+    originalTransactionUUID,
+    enableReceiptUi,
+    enableUiDismiss,
+    finishTimeout,
+    onReverseSuccess,
+    onReverseFailed,
+  }: EmbededReverseOptions) {
+    const data = {
+      original_transaction_uuid: originalTransactionUUID,
+      enableReceiptUi: enableReceiptUi,
+      finishTimeout: finishTimeout,
+      enableUiDismiss: enableUiDismiss,
+    };
+    function callback(response: ApiResponse) {
+      if (response.status === 200) {
+        onReverseSuccess?.(response.receipts! as TransactionRecipt[]);
+      } else {
+        onReverseFailed?.(ReverseErrorMap(response));
+      }
+    }
+    return await this.callMethod('reverse', data, callback);
+  }
+
+  async reconcile({
+    adminPin,
+    enableReceiptUi,
+    enableUiDismiss,
+    finishTimeout,
+    onReconcileSuccess,
+    onReconcileFailed,
+  }: EmbededReconcileOptions) {
+    const data = {
+      enableReceiptUi: enableReceiptUi,
+      finishTimeout: finishTimeout,
+      adminPin: adminPin,
+      enableUiDismiss: enableUiDismiss,
+    };
+
+    function callback(response: ApiResponse) {
+      if (response.status === 200) {
+        onReconcileSuccess?.(response.receipts! as ReconciliationRecipt[]);
+      } else {
+        onReconcileFailed?.(ReconcileErrorMap(response));
+      }
+    }
+    return await this.callMethod('reconcile', data, callback);
+  }
+
+  async session({
+    sessionID,
+    enableReceiptUi,
+    enableReversalUi,
+    enableUiDismiss,
+    finishTimeout,
+    onSessionClose,
+    onSessionFailed,
+    onSessionOpen,
+  }: EmbededSessionOptions) {
+    const data = {
+      sessionID: sessionID,
+      enableReceiptUi: enableReceiptUi,
+      enableReversal: enableReversalUi,
+      finishTimeout: finishTimeout,
+      enableUiDismiss: enableUiDismiss,
+    };
+
+    function callback(response: ApiResponse) {
+      if (response.status === 200) {
+        onSessionOpen !== undefined &&
+          onSessionOpen(response.receipts as TransactionRecipt[]);
+      } else if (response.status === 500) {
+        onSessionClose !== undefined && onSessionClose(response.session!);
+      } else {
+        onSessionFailed !== undefined &&
+          onSessionFailed(SessionErrorMap(response));
+      }
+    }
+    return await this.callMethod('session', data, callback);
+  }
+  async logout() {
+    return await this.callMethod('logout', {}, () => {});
+  }
   // // async test(options: { xxx: string }, callback: (str: string) => void) {
   // //   return await this.nearpay.test(options, callback);
   // // }
