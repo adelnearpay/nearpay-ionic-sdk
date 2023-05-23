@@ -60,14 +60,15 @@ export default function App() {
             <Redirect to="/home" />
           </Route>
           <Route path="/home" exact={true}>
-            <MainPage />
-          </Route>
-          <Route path="/embeded">
+            {/* <MainPage /> */}
             <EmbededPage />
           </Route>
-          <Route path="/remote">
+          {/* <Route path="/embeded">
+            <EmbededPage />
+          </Route> */}
+          {/* <Route path="/remote">
             <RemotePage />
-          </Route>
+          </Route> */}
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>

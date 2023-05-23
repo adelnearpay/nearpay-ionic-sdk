@@ -100,8 +100,6 @@ export type NearpayPluginDefenetions = {
   reconcile: (options: any, callback: any) => Promise<any>;
   logout: (options: any, callback: any) => Promise<any>;
   session: (options: any, callback: any) => Promise<any>;
-  test: (
-    otps: { xxx: string },
-    callback: (str: string) => void,
-  ) => Promise<any>;
+  proxyShowConnection: (options: any, callback: any) => Promise<void>;
+  proxyDisconnect: (options: any, callback: any) => Promise<void>;
 };

@@ -8,6 +8,8 @@ type props = {
   purchaseThenReverse: () => void;
   logout: () => void;
   reconcile: () => void;
+  proxy_showConnection: () => void;
+  proxy_disconnect: () => void;
   results: string;
 };
 
@@ -85,6 +87,13 @@ export default function EmbededNearpayProvider({
     embededNearpay.logout();
   }
 
+  function proxy_showConnection() {
+    embededNearpay.proxy.showConnection();
+  }
+  function proxy_disconnect() {
+    embededNearpay.proxy.disconnect();
+  }
+
   const values: props = {
     embededNearpay,
     results,
@@ -93,6 +102,8 @@ export default function EmbededNearpayProvider({
     purchaseThenRefund,
     purchaseThenReverse,
     reconcile,
+    proxy_showConnection,
+    proxy_disconnect,
   };
   return <ctx.Provider value={values}>{children}</ctx.Provider>;
 }

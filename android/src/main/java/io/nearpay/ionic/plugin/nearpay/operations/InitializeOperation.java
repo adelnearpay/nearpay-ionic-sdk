@@ -1,6 +1,7 @@
 package io.nearpay.ionic.plugin.nearpay.operations;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 
 import java.util.Locale;
 import java.util.Map;
@@ -10,6 +11,7 @@ import io.nearpay.ionic.plugin.nearpay.ErrorStatus;
 import io.nearpay.ionic.plugin.nearpay.NearpayLib;
 import io.nearpay.ionic.plugin.nearpay.PluginProvider;
 import io.nearpay.ionic.plugin.nearpay.sender.NearpaySender;
+import io.nearpay.proxy.NearpayProxy;
 import io.nearpay.sdk.Environments;
 import io.nearpay.sdk.NearPay;
 
@@ -43,6 +45,10 @@ public class InitializeOperation extends BaseOperation {
                     this.provider.getNearpayLib().getAuthType(authType, authvalue),
                     locale,
                     env);
+                    
+            this.provider.getNearpayLib().nearpayProxy = new NearpayProxy(
+                    (Application) this.provider.getNearpayLib().context.getApplicationContext(),
+                    this.provider.getNearpayLib().nearpay);
 
             response = NearpayLib.commonResponse(ErrorStatus.success_code,
                     "NearPay initialized");

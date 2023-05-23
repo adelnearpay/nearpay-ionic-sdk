@@ -55,6 +55,8 @@ function Wrapped() {
     purchaseThenRefund,
     purchaseThenReverse,
     reconcile,
+    proxy_disconnect,
+    proxy_showConnection,
   } = useEmbededNearpay();
 
   return (
@@ -104,6 +106,27 @@ function Wrapped() {
             }}
           >
             logout
+          </button>
+        </div>
+        <hr />
+
+        <h3>Proxy functions</h3>
+        <div>
+          <button
+            onClick={() => {
+              proxy_showConnection();
+            }}
+          >
+            proxy/ show connection
+          </button>
+        </div>
+        <div>
+          <button
+            onClick={() => {
+              proxy_disconnect();
+            }}
+          >
+            proxy/ disconnect
           </button>
         </div>
 

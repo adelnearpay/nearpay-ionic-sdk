@@ -21,7 +21,7 @@ android {
     namespace "io.nearpay.ionic.plugin"
     compileSdkVersion project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 33
     defaultConfig {
-        minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 22
+        minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 26
         targetSdkVersion project.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 33
         versionCode 1
         versionName "1.0"
@@ -55,7 +55,7 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
-    implementation "io.nearpay:nearpay-sdk:2.1.29"
+    implementation 'io.nearpay:nearpay-proxy:0.0.6'
     implementation 'com.google.code.gson:gson:2.9.0' 
     implementation 'org.json:json:20171018' 
 

@@ -105,6 +105,16 @@ public class NearpayPluginPlugin extends Plugin {
         runOperation("logout", call);
     }
 
+    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    public void proxyShowConnection(PluginCall call) {
+        runOperation("proxyShowConnection", call);
+    }
+
+    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    public void proxyDisconnect(PluginCall call) {
+        runOperation("proxyDisconnect", call);
+    }
+
     private void runOperation(String opName, PluginCall call){
         call.setKeepAlive(true);
         Map<String, Object> args = new Gson().fromJson(call.getData().toString(), HashMap.class);

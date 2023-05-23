@@ -23,6 +23,7 @@ import {
 
 export class EmbededNearpay {
   private nearpay = registerPlugin<NearpayPluginDefenetions>('NearpayPlugin');
+  public proxy = new NearpayProxy(this, this.nearpay);
 
   constructor(options: InitializeOptions) {
     this.nearpay.initialize(options);
@@ -196,5 +197,33 @@ export class EmbededNearpay {
       callback,
     });
     return await this.nearpay[name](options, callback);
+  }
+}
+
+class NearpayProxy {
+  constructor(
+    private embededNearpay: EmbededNearpay,
+    private plugin: NearpayPluginDefenetions,
+  ) {}
+
+  async showConnection() {
+    return await this.callMethod('proxyShowConnection', {}, () => {});
+  }
+
+  async disconnect() {
+    return await this.callMethod('proxyDisconnect', {}, () => {});
+  }
+
+  private async callMethod(
+    name: keyof NearpayPluginDefenetions,
+    options: any,
+    callback: (response: ApiResponse) => void,
+  ) {
+    console.log({
+      name,
+      options,
+      callback,
+    });
+    return await this.plugin[name](options, callback);
   }
 }

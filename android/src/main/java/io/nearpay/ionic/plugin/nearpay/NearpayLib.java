@@ -11,8 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import io.nearpay.sdk.Environments;
+
+import io.nearpay.proxy.NearpayProxy;
 import io.nearpay.sdk.NearPay;
 import io.nearpay.sdk.data.models.ReconciliationReceipt;
 import io.nearpay.sdk.data.models.Session;
@@ -22,6 +23,8 @@ import io.nearpay.sdk.utils.enums.AuthenticationData;
 public class NearpayLib {
     private PluginProvider provider;
     public NearPay nearpay;
+    public NearpayProxy nearpayProxy;
+
     public Context context;
 
     public String authTypeShared = "";
