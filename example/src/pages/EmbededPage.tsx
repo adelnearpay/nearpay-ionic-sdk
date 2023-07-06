@@ -57,6 +57,10 @@ function Wrapped() {
     reconcile,
     proxy_disconnect,
     proxy_showConnection,
+    getReconciliation,
+    getReconciliationsList,
+    getTransaction,
+    getTransactionsList,
   } = useEmbededNearpay();
 
   return (
@@ -108,6 +112,46 @@ function Wrapped() {
             logout
           </button>
         </div>
+        <hr />
+
+        <h3>Query functions</h3>
+        <div>
+          <button
+            onClick={() => {
+              getTransactionsList();
+            }}
+          >
+            get transactions list
+          </button>
+        </div>
+        <div>
+          <button
+            onClick={() => {
+              getTransaction();
+            }}
+          >
+            get transaction{' '}
+          </button>
+        </div>
+        <div>
+          <button
+            onClick={() => {
+              getReconciliationsList();
+            }}
+          >
+            get reconciliations list
+          </button>
+        </div>
+        <div>
+          <button
+            onClick={() => {
+              getReconciliation();
+            }}
+          >
+            get reconciliation
+          </button>
+        </div>
+
         <hr />
 
         <h3>Proxy functions</h3>

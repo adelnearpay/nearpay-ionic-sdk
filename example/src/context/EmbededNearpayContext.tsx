@@ -11,6 +11,11 @@ type props = {
   proxy_showConnection: () => void;
   proxy_disconnect: () => void;
   results: string;
+  setResults: React.Dispatch<React.SetStateAction<string>>;
+  getTransactionsList: () => void;
+  getTransaction: () => void;
+  getReconciliationsList: () => void;
+  getReconciliation: () => void;
 };
 
 const ctx = React.createContext({} as props);
@@ -87,6 +92,37 @@ export default function EmbededNearpayProvider({
     embededNearpay.logout();
   }
 
+  //  =-=--=-=-=-= query -=-=-=-=-=-=-=
+  function getTransactionsList() {
+    embededNearpay.getTranactionsList({
+      onResult: setText,
+      onFail: setText,
+    });
+  }
+
+  function getTransaction() {
+    embededNearpay.getTranaction({
+      transactionUUID: 'a2fd6519-2b37-4336-be6d-5520bb3b6427',
+      onResult: setText,
+      onFail: setText,
+    });
+  }
+
+  function getReconciliationsList() {
+    embededNearpay.getReconciliationsList({
+      onResult: setText,
+      onFail: setText,
+    });
+  }
+
+  function getReconciliation() {
+    embededNearpay.getReconciliation({
+      reconciliationUUID: '6d4a48b8-d194-4aad-92c9-a77606758799',
+      onResult: setText,
+      onFail: setText,
+    });
+  }
+
   function proxy_showConnection() {
     embededNearpay.proxy.showConnection();
   }
@@ -97,6 +133,7 @@ export default function EmbededNearpayProvider({
   const values: props = {
     embededNearpay,
     results,
+    setResults,
     logout,
     purchase,
     purchaseThenRefund,
@@ -104,6 +141,10 @@ export default function EmbededNearpayProvider({
     reconcile,
     proxy_showConnection,
     proxy_disconnect,
+    getTransactionsList,
+    getTransaction,
+    getReconciliationsList,
+    getReconciliation,
   };
   return <ctx.Provider value={values}>{children}</ctx.Provider>;
 }

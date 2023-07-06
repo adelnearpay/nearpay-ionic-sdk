@@ -96,7 +96,7 @@ public class NearpayPluginPlugin extends Plugin {
     }
 
     @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
-    public void getTransactionsList(PluginCall call) {
+    public void getTransactions(PluginCall call) {
         runOperation("getTransactions", call);
     }
 
@@ -108,7 +108,7 @@ public class NearpayPluginPlugin extends Plugin {
 
 
     @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
-    public void getReconciliationsList(PluginCall call) {
+    public void getReconciliations(PluginCall call) {
         runOperation("getReconciliations", call);
     }
 
