@@ -4,6 +4,7 @@ import {
 } from '@nearpaydev/nearpay-ts-sdk';
 import {
   PurchaseError,
+  QueryError,
   ReconcileError,
   RefundError,
   ReverseError,
@@ -91,6 +92,32 @@ export type EmbededSessionOptions = {
   onSessionFailed?: (error: SessionError) => void;
 };
 
+export type EmbededGetTransactionsListOptions = {
+  page?: number;
+  limit?: number;
+  onResult: (bannerList: any[]) => any;
+  onFail: (error: QueryError) => any;
+};
+
+export type EmbededGetTransactionOptions = {
+  transactionUUID: string;
+  onResult: (receipt: any[]) => any;
+  onFail: (error: QueryError) => any;
+};
+
+export type EmbededGetReconciliationsListOptions = {
+  page?: number;
+  limit?: number;
+  onResult: (receipt: any[]) => any;
+  onFail: (error: QueryError) => any;
+};
+
+export type EmbededGetReconciliationOptions = {
+  reconciliationUUID: string;
+  onResult: (receipt: any[]) => any;
+  onFail: (error: QueryError) => any;
+};
+
 export type NearpayPluginDefenetions = {
   initialize: (options: EmbededInitializeOptions) => Promise<any>;
   setup: (options: any, callback: any) => Promise<any>;
@@ -100,6 +127,10 @@ export type NearpayPluginDefenetions = {
   reconcile: (options: any, callback: any) => Promise<any>;
   logout: (options: any, callback: any) => Promise<any>;
   session: (options: any, callback: any) => Promise<any>;
+  getTransactions: (options: any, callback: any) => Promise<any>;
+  getTransaction: (options: any, callback: any) => Promise<any>;
+  getReconciliations: (options: any, callback: any) => Promise<any>;
+  getReconciliation: (options: any, callback: any) => Promise<any>;
   proxyShowConnection: (options: any, callback: any) => Promise<void>;
   proxyDisconnect: (options: any, callback: any) => Promise<void>;
 };

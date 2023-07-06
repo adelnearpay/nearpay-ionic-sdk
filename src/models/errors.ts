@@ -7,8 +7,8 @@ import { TransactionRecipt } from '@nearpaydev/nearpay-ts-sdk';
 export enum PURCHASE_ERROR_ENUM {
   DECLIEND = 'purchase-decliend',
   REJECTED = 'purchase-rejected',
-  AUTH_FAILED = 'purchase-AUTH_FAILED',
-  INVALID_STATUS = 'purchase-INVALID_STATUS',
+  AUTH_FAILED = 'purchase-auth-failed',
+  INVALID_STATUS = 'purchase-invalid-status',
   GENERAL_ERROR = 'purchase-general-error',
 }
 
@@ -49,8 +49,8 @@ export type PurchaseError =
 export enum REFUND_ERROR_ENUM {
   DECLIEND = 'refund-decliend',
   REJECTED = 'refund-rejected',
-  AUTH_FAILED = 'refund-AUTH_FAILED',
-  INVALID_STATUS = 'refund-INVALID_STATUS',
+  AUTH_FAILED = 'refund-auth-failed',
+  INVALID_STATUS = 'refund-invalid-status',
   GENERAL_ERROR = 'refund-general-error',
 }
 
@@ -89,8 +89,8 @@ export type RefundError =
 
 export enum REVERSE_ERROR_ENUM {
   FAILURE_MESSAGE = 'Reverse-failure-message',
-  AUTH_FAILED = 'Reverse-AUTH_FAILED',
-  INVALID_STATUS = 'Reverse-INVALID_STATUS',
+  AUTH_FAILED = 'Reverse-auth-failed',
+  INVALID_STATUS = 'Reverse-invalid-status',
   GENERAL_ERROR = 'reverse-general-error',
 }
 
@@ -123,8 +123,8 @@ export type ReverseError =
 
 export enum RECONCILE_ERROR_ENUM {
   FAILURE_MESSAGE = 'Reconcile-failure-message',
-  AUTH_FAILED = 'Reconcile-AUTH_FAILED',
-  INVALID_STATUS = 'Reconcile-INVALID_STATUS',
+  AUTH_FAILED = 'Reconcile-auth-failed',
+  INVALID_STATUS = 'Reconcile-invalid-status',
   GENERAL_ERROR = 'Reconcile-general-error',
 }
 
@@ -157,8 +157,8 @@ export type ReconcileError =
 
 export enum SESSION_ERROR_ENUM {
   FAILURE_MESSAGE = 'Session-failure-message',
-  AUTH_FAILED = 'Session-AUTH_FAILED',
-  INVALID_STATUS = 'Session-INVALID_STATUS',
+  AUTH_FAILED = 'Session-auth-failed',
+  INVALID_STATUS = 'Session-invalid-status',
   GENERAL_ERROR = 'Session-general-error',
 }
 
@@ -184,3 +184,37 @@ export type SessionError =
   | SessionAuthFailed
   | SessionInvalidStatus
   | SessionGeneralError;
+
+// ------------------------------------------
+// ----------------- query ------------------
+// ------------------------------------------
+
+export enum QUERY_ERROR_ENUM {
+  FAILURE_MESSAGE = 'query-failure-message',
+  AUTH_FAILED = 'query-auth-failed',
+  INVALID_STATUS = 'query-invalid-status',
+  GENERAL_ERROR = 'query-general-error',
+}
+
+export type QueryFailureMessage = {
+  type: QUERY_ERROR_ENUM.FAILURE_MESSAGE;
+  message: string;
+};
+
+export type QueryAuthFailed = {
+  type: QUERY_ERROR_ENUM.AUTH_FAILED;
+  message: string;
+};
+
+export type QueryInvalidStatus = {
+  type: QUERY_ERROR_ENUM.INVALID_STATUS;
+};
+export type QueryGeneralError = {
+  type: QUERY_ERROR_ENUM.GENERAL_ERROR;
+};
+
+export type QueryError =
+  | QueryFailureMessage
+  | QueryAuthFailed
+  | QueryInvalidStatus
+  | QueryGeneralError;

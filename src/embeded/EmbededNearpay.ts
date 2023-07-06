@@ -7,6 +7,10 @@ import {
   EmbededReverseOptions,
   EmbededReconcileOptions,
   EmbededSessionOptions,
+  EmbededGetTransactionsListOptions,
+  EmbededGetTransactionOptions,
+  EmbededGetReconciliationsListOptions,
+  EmbededGetReconciliationOptions,
 } from '../definitions';
 import { ApiResponse } from '../models/ApiResponse';
 import {
@@ -15,6 +19,7 @@ import {
 } from '@nearpaydev/nearpay-ts-sdk';
 import {
   PurchaseErrorMap,
+  QueryErrorMap,
   ReconcileErrorMap,
   RefundErrorMap,
   ReverseErrorMap,
@@ -182,9 +187,86 @@ export class EmbededNearpay {
   async logout() {
     return await this.callMethod('logout', {}, () => {});
   }
-  // // async test(options: { xxx: string }, callback: (str: string) => void) {
-  // //   return await this.nearpay.test(options, callback);
-  // // }
+
+  async getTranactionsList({
+    limit,
+    page,
+    onResult,
+    onFail,
+  }: EmbededGetTransactionsListOptions) {
+    const data = {
+      limit,
+      page,
+    };
+
+    function callback(response: ApiResponse) {
+      if (response.status === 200) {
+        onResult !== undefined && onResult(response.result);
+      } else {
+        onFail !== undefined && onFail(QueryErrorMap(response));
+      }
+    }
+    return await this.callMethod('getTransactions', data, callback);
+  }
+
+  async getTranaction({
+    transactionUUID,
+    onResult,
+    onFail,
+  }: EmbededGetTransactionOptions) {
+    const data = {
+      transaction_uuid: transactionUUID,
+    };
+
+    function callback(response: ApiResponse) {
+      if (response.status === 200) {
+        onResult !== undefined && onResult(response.result);
+      } else {
+        onFail !== undefined && onFail(QueryErrorMap(response));
+      }
+    }
+    return await this.callMethod('getTransaction', data, callback);
+  }
+
+  async getReconciliationsList({
+    limit,
+    page,
+    onResult,
+    onFail,
+  }: EmbededGetReconciliationsListOptions) {
+    const data = {
+      limit,
+      page,
+    };
+
+    function callback(response: ApiResponse) {
+      if (response.status === 200) {
+        onResult !== undefined && onResult(response.result);
+      } else {
+        onFail !== undefined && onFail(QueryErrorMap(response));
+      }
+    }
+    return await this.callMethod('getReconciliations', data, callback);
+  }
+
+  async getReconciliation({
+    reconciliationUUID,
+    onResult,
+    onFail,
+  }: EmbededGetReconciliationOptions) {
+    const data = {
+      reconciliation_uuid: reconciliationUUID,
+    };
+
+    function callback(response: ApiResponse) {
+      if (response.status === 200) {
+        onResult !== undefined && onResult(response.result);
+      } else {
+        onFail !== undefined && onFail(QueryErrorMap(response));
+      }
+    }
+    return await this.callMethod('getReconciliation', data, callback);
+  }
 
   private async callMethod(
     name: keyof NearpayPluginDefenetions,

@@ -8,6 +8,12 @@ import {
   PurchaseGeneralError,
   PurchaseInvalidStatus,
   PurchaseRejected,
+  QUERY_ERROR_ENUM,
+  QueryAuthFailed,
+  QueryError,
+  QueryFailureMessage,
+  QueryGeneralError,
+  QueryInvalidStatus,
   RECONCILE_ERROR_ENUM,
   REFUND_ERROR_ENUM,
   REVERSE_ERROR_ENUM,
@@ -204,6 +210,35 @@ export function SessionErrorMap(response: ApiResponse): SessionError {
       return {
         type: SESSION_ERROR_ENUM.GENERAL_ERROR,
       } as SessionGeneralError;
+
+    default:
+      throw `invalid status`;
+  }
+}
+
+export function QueryErrorMap(response: ApiResponse): QueryError {
+  switch (response.status) {
+    case 401:
+      return {
+        type: QUERY_ERROR_ENUM.AUTH_FAILED,
+        message: response.message!,
+      } as QueryAuthFailed;
+
+    case 403:
+      return {
+        type: QUERY_ERROR_ENUM.FAILURE_MESSAGE,
+        message: response.message!,
+      } as QueryFailureMessage;
+
+    case 404:
+      return {
+        type: QUERY_ERROR_ENUM.INVALID_STATUS,
+      } as QueryInvalidStatus;
+
+    case 402:
+      return {
+        type: QUERY_ERROR_ENUM.GENERAL_ERROR,
+      } as QueryGeneralError;
 
     default:
       throw `invalid status`;

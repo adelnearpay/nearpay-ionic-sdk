@@ -9,4 +9,5 @@ export type ApiResponse = {
   message?: string;
   receipts?: TransactionRecipt[] | ReconciliationRecipt[];
   session?: SessionType;
+  result?: any;
 };

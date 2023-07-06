@@ -28,6 +28,11 @@ public class OperatorFactory {
         map.put("logout", new LogoutOperation(provider));
         map.put("setup", new SetupOperation(provider));
         map.put("session", new SessionOperation(provider));
+        map.put("getReconciliation", new GetReconciliationOperation(provider));
+        map.put("getReconciliations", new GetReconciliationsPageOperation(provider));
+        map.put("getTransaction", new GetTransactionOperation(provider));
+        map.put("getTransactions", new GetTransactionPageOperation(provider));
+
         map.put("proxyShowConnection", new ProxyShowConnectOperation(provider));
         map.put("proxyDisconnect", new ProxyDisconnectOperation(provider));
 

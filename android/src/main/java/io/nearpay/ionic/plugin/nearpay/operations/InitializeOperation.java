@@ -45,10 +45,10 @@ public class InitializeOperation extends BaseOperation {
                     this.provider.getNearpayLib().getAuthType(authType, authvalue),
                     locale,
                     env);
-                    
-            this.provider.getNearpayLib().nearpayProxy = new NearpayProxy(
-                    (Application) this.provider.getNearpayLib().context.getApplicationContext(),
-                    this.provider.getNearpayLib().nearpay);
+//
+//            this.provider.getNearpayLib().nearpayProxy =  NearpayProxy.Companion.getInstanceOrCreate(
+//                    (Application) this.provider.getNearpayLib().context.getApplicationContext(),
+//                    this.provider.getNearpayLib().nearpay);
 
             response = NearpayLib.commonResponse(ErrorStatus.success_code,
                     "NearPay initialized");
