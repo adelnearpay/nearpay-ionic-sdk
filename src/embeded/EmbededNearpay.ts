@@ -28,10 +28,30 @@ import {
 
 export class EmbededNearpay {
   private nearpay = registerPlugin<NearpayPluginDefenetions>('NearpayPlugin');
+  private savedOptions: EmbededInitializeOptions;
   public proxy = new NearpayProxy(this, this.nearpay);
 
   constructor(options: EmbededInitializeOptions) {
     this.nearpay.initialize(options);
+    this.savedOptions = options;
+  }
+
+  async initialize({
+    onSuccess,
+    onFail,
+  }: {
+    onSuccess: () => {};
+    onFail: () => {};
+  }) {
+    function callback(response: ApiResponse) {
+      if (response.status === 200) {
+        onSuccess && onSuccess();
+      } else {
+        onFail && onFail();
+      }
+    }
+
+    return await this.callMethod('initialize', this.savedOptions, callback);
   }
 
   async purchase({
