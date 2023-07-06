@@ -2,7 +2,7 @@ import { registerPlugin } from '@capacitor/core';
 import {
   NearpayPluginDefenetions,
   EmbededPurchaseOptions,
-  InitializeOptions,
+  EmbededInitializeOptions,
   EmbededRefundOptions,
   EmbededReverseOptions,
   EmbededReconcileOptions,
@@ -25,7 +25,7 @@ export class EmbededNearpay {
   private nearpay = registerPlugin<NearpayPluginDefenetions>('NearpayPlugin');
   public proxy = new NearpayProxy(this, this.nearpay);
 
-  constructor(options: InitializeOptions) {
+  constructor(options: EmbededInitializeOptions) {
     this.nearpay.initialize(options);
   }
 

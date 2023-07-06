@@ -28,7 +28,7 @@ export enum Locale {
   default = 'default',
 }
 
-export type InitializeOptions = {
+export type EmbededInitializeOptions = {
   authtype: AuthenticationType;
   authvalue: string;
   locale?: Locale;
@@ -92,7 +92,7 @@ export type EmbededSessionOptions = {
 };
 
 export type NearpayPluginDefenetions = {
-  initialize: (options: InitializeOptions) => Promise<any>;
+  initialize: (options: EmbededInitializeOptions) => Promise<any>;
   setup: (options: any, callback: any) => Promise<any>;
   purchase: (options: any, callback: any) => Promise<any>;
   reverse: (options: any, callback: any) => Promise<any>;

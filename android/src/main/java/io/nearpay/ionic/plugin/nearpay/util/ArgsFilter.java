@@ -8,7 +8,10 @@ import io.nearpay.ionic.plugin.nearpay.PluginProvider;
 
 public class ArgsFilter {
     private PluginProvider provider;
-
+    private Map savedArgs;
+    public ArgsFilter(Map args) {
+        savedArgs =args;
+    }
     public ArgsFilter(PluginProvider provider) {
         this.provider = provider;
     }
@@ -70,6 +73,35 @@ public class ArgsFilter {
             return  (Long) beforeCast;
 
         }
+    }
 
+    int castToInt(Object beforeCast) {
+        if( beforeCast instanceof Long) {
+            return ((Long) beforeCast).intValue();
+        } else if(beforeCast instanceof Double){
+            return ((Double) beforeCast).intValue();
+        } else  {
+            return  (int) beforeCast;
+        }
+    }
+
+    public String getTransactionUuid() {
+        return savedArgs.get("transaction_uuid").toString();
+    }
+
+    public String getReconciliationUuid() {
+        return savedArgs.get("reconciliation_uuid").toString();
+    }
+
+
+    public String getAdminPin(){
+        return savedArgs.get("adminPin") == null ? null : savedArgs.get("adminPin").toString();
+    }
+
+    public int getPage(){
+        return savedArgs.get("page") == null ? 1 :castToInt(savedArgs.get("page"));
+    }
+    public int getLimit(){
+        return savedArgs.get("limit") == null ? 30 : castToInt(savedArgs.get("limit"));
     }
 }

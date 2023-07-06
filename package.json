@@ -1,5 +1,5 @@
 {
-  "name": "ionic-nearpay-sdk",
+  "name": "@nearpaydev/nearpay-ionic-sdk",
   "version": "0.0.1",
   "description": "nearpay sdk for ionic based apps",
   "main": "dist/plugin.cjs.js",
@@ -39,6 +39,7 @@
     "swiftlint": "node-swiftlint",
     "docgen": "docgen --api NearpayPluginPlugin --output-readme README.md --output-json dist/docs.json",
     "build": "npm run clean &&  tsc && rollup -c rollup.config.js",
+    "prepack": "npm run build",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
@@ -51,6 +52,7 @@
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
+    "@types/uuid": "^9.0.1",
     "eslint": "^7.11.0",
     "prettier": "~2.3.0",
     "prettier-plugin-java": "~1.0.2",
@@ -76,6 +78,7 @@
     }
   },
   "dependencies": {
+    "@ionic/storage": "^4.0.0",
     "@nearpaydev/nearpay-ts-sdk": "^1.0.3"
   }
 }
