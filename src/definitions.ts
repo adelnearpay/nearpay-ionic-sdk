@@ -95,7 +95,7 @@ export type EmbededSessionOptions = {
 export type EmbededGetTransactionsListOptions = {
   page?: number;
   limit?: number;
-  onResult?: (bannerList: any[]) => any;
+  onResult?: (bannerList: any) => any;
   onFail?: (error: QueryError) => any;
 };
 
@@ -108,13 +108,13 @@ export type EmbededGetTransactionOptions = {
 export type EmbededGetReconciliationsListOptions = {
   page?: number;
   limit?: number;
-  onResult?: (receipt: any[]) => any;
+  onResult?: (receipt: any) => any;
   onFail?: (error: QueryError) => any;
 };
 
 export type EmbededGetReconciliationOptions = {
   reconciliationUUID: string;
-  onResult?: (receipt: any[]) => any;
+  onResult?: (receipt: any) => any;
   onFail?: (error: QueryError) => any;
 };
 
