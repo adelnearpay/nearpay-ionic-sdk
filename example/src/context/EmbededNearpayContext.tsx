@@ -1,4 +1,4 @@
-import { EmbededNearpay } from 'ionic-nearpay-sdk';
+import { EmbededNearpay } from '@nearpaydev/nearpay-ionic-sdk';
 import React, { useContext, useState } from 'react';
 
 type props = {
