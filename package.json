@@ -7,6 +7,7 @@
   "types": "src/index.ts",
   "unpkg": "dist/plugin.js",
   "files": [
+    "src",
     "android/src/main/",
     "android/build.gradle",
     "dist/",
