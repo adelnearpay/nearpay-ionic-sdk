@@ -7,7 +7,10 @@
   "types": "src/index.ts",
   "unpkg": "dist/plugin.js",
   "files": [
-    "src",
+    "src/",
+    "dist/",
+    "android/",
+    "ios/",
     "android/src/main/",
     "android/build.gradle",
     "dist/",
