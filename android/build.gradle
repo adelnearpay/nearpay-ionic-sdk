@@ -55,7 +55,7 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
-    implementation 'io.nearpay:nearpay-proxy:0.0.19'
+    implementation 'io.nearpay:nearpay-proxy:0.0.36'
     implementation 'com.google.code.gson:gson:2.9.0' 
     implementation 'org.json:json:20171018' 
 

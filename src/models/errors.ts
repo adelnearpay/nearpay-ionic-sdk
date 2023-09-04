@@ -1,8 +1,8 @@
-import { TransactionRecipt } from '@nearpaydev/nearpay-ts-sdk';
-
 // ------------------------------------------
 // --------------- Purchase -----------------
 // ------------------------------------------
+
+import { TransactionData } from '@nearpaydev/nearpay-ts-sdk';
 
 export enum PURCHASE_ERROR_ENUM {
   DECLIEND = 'purchase-decliend',
@@ -14,7 +14,7 @@ export enum PURCHASE_ERROR_ENUM {
 
 export type PurchaseDecielnd = {
   type: PURCHASE_ERROR_ENUM.DECLIEND;
-  reciepts: TransactionRecipt[];
+  reciepts: TransactionData;
 };
 
 export type PurchaseRejected = {
@@ -56,7 +56,7 @@ export enum REFUND_ERROR_ENUM {
 
 export type RefundDecielnd = {
   type: REFUND_ERROR_ENUM.DECLIEND;
-  reciepts: TransactionRecipt[];
+  reciepts: TransactionData;
 };
 
 export type RefundRejected = {

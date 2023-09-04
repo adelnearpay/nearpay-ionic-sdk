@@ -1,4 +1,4 @@
-package io.nearpay.ionic.plugin.nearpay;
+package io.nearpay.ionic.plugin.common.status;
 
 //General Response
 public class ErrorStatus {
@@ -37,6 +37,5 @@ public class ErrorStatus {
 
     public static final int session_opened_code = 200;
 
-    public static final int session_closed_code = 500;
-
+    public static final int session_closed_code = 210;
 }

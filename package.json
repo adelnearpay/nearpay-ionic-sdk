@@ -79,6 +79,6 @@
   },
   "dependencies": {
     "@ionic/storage": "^4.0.0",
-    "@nearpaydev/nearpay-ts-sdk": "^1.0.3"
+    "@nearpaydev/nearpay-ts-sdk": "^1.0.5"
   }
 }

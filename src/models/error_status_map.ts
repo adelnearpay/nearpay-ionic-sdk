@@ -1,4 +1,4 @@
-import { TransactionRecipt } from '@nearpaydev/nearpay-ts-sdk';
+import { TransactionData } from '@nearpaydev/nearpay-ts-sdk';
 import { ApiResponse } from './ApiResponse';
 import {
   PURCHASE_ERROR_ENUM,
@@ -50,7 +50,7 @@ export function PurchaseErrorMap(response: ApiResponse): PurchaseError {
     case 405:
       return {
         type: PURCHASE_ERROR_ENUM.DECLIEND,
-        reciepts: response.receipts as TransactionRecipt[],
+        reciepts: response.result as TransactionData[],
       } as PurchaseDecielnd;
 
     case 406:
@@ -88,7 +88,7 @@ export function RefundErrorMap(response: ApiResponse): RefundError {
     case 405:
       return {
         type: REFUND_ERROR_ENUM.DECLIEND,
-        reciepts: response.receipts as TransactionRecipt[],
+        reciepts: response.result as TransactionData[],
       } as RefundDecielnd;
 
     case 406:

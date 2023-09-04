@@ -1,23 +1,18 @@
-package io.nearpay.ionic.plugin.nearpay.operations;
+package io.nearpay.ionic.plugin.common.operations;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
-import io.nearpay.ionic.plugin.nearpay.ErrorStatus;
-import io.nearpay.ionic.plugin.nearpay.NearpayLib;
-import io.nearpay.ionic.plugin.nearpay.PluginProvider;
-import io.nearpay.ionic.plugin.nearpay.sender.NearpaySender;
+import io.nearpay.ionic.plugin.common.status.ErrorStatus;
+import io.nearpay.ionic.plugin.common.NearpayLib;
+import io.nearpay.ionic.plugin.common.PluginProvider;
+import io.nearpay.ionic.plugin.common.sender.NearpaySender;
+import io.nearpay.ionic.plugin.common.filter.ArgsFilter;
 import io.nearpay.sdk.data.models.Session;
-import io.nearpay.sdk.data.models.TransactionReceipt;
-import io.nearpay.sdk.utils.ReceiptUtilsKt;
 import io.nearpay.sdk.utils.enums.SessionFailure;
+import io.nearpay.sdk.utils.enums.TransactionData;
 import io.nearpay.sdk.utils.listeners.SessionListener;
 
 public class SessionOperation extends BaseOperation {
@@ -26,44 +21,37 @@ public class SessionOperation extends BaseOperation {
         super(provider);
     }
 
-    private Map sessionToJson(Session session) {
-        Gson gson = new Gson(); // Or use new GsonBuilder().create();
-        String json = gson.toJson(session); // serializes target to Json return
-        Map sessionMap = NearpayLib.JSONStringToMap(json);
-        Map response = NearpayLib.commonResponse(ErrorStatus.success_code, "Session Closed");
-        response.put("session", sessionMap);
-        return response;
-    }
-
-    private void doSession(Map args, NearpaySender sender) {
-        String sessionID = (String) args.get("sessionID");
-        Long finishTimeout = (Long) args.get("finishTimeout");
-        Boolean enableReceiptUi = (Boolean) args.get("enableReceiptUi");
-        Boolean enableReversal = (Boolean) args.get("enableReversal");
-        Boolean enableUiDismiss = (Boolean) args.get("enableUiDismiss");
+    @Override
+    public void run(ArgsFilter filter, NearpaySender sender) {
+        String sessionID = filter.getSessionId();
+        Long finishTimeout = filter.getTimeout();
+        Boolean enableReceiptUi = filter.isEnableReceiptUi();
+        Boolean enableReversal = filter.isEnableReversal();
+        Boolean enableUiDismiss = filter.isEnableUiDismiss();
 
         provider.getNearpayLib().nearpay.session(sessionID, enableReceiptUi, enableReversal,
                 finishTimeout, enableUiDismiss,
                 new SessionListener() {
                     @Override
                     public void onSessionClosed(@Nullable Session session) {
-                        Map<String, Object> responseDict = NearpayLib.SessionResponse(ErrorStatus.session_closed_code,
+                        Map<String, Object> responseDict = NearpayLib.ApiResponse(ErrorStatus.session_closed_code,
                                 "", session);
                         sender.send(responseDict);
                     }
 
                     @Override
-                    public void onSessionOpen(@Nullable List<TransactionReceipt> list) {
+                    public void onSessionOpen(@NonNull TransactionData transactionData) {
                         Map<String, Object> response = NearpayLib.ApiResponse(ErrorStatus.session_opened_code, "",
-                                list);
+                                transactionData);
                         sender.send(response);
+
                     }
 
                     @Override
                     public void onSessionFailed(@NonNull SessionFailure sessionFailure) {
                         int status = ErrorStatus.general_failure_code;
                         String message = null;
-                        List<TransactionReceipt> receipts = null;
+                        TransactionData receipts = null;
 
                         if (sessionFailure instanceof SessionFailure.AuthenticationFailed) {
                             message = ((SessionFailure.AuthenticationFailed) sessionFailure).getMessage();
@@ -82,10 +70,5 @@ public class SessionOperation extends BaseOperation {
                         sender.send(response);
                     }
                 });
-    }
-
-    @Override
-    public void run(Map args, NearpaySender sender) {
-        doSession(args, sender);
     }
 }

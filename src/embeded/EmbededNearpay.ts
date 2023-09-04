@@ -13,10 +13,7 @@ import {
   EmbededGetReconciliationOptions,
 } from '../definitions';
 import { ApiResponse } from '../models/ApiResponse';
-import {
-  ReconciliationRecipt,
-  TransactionRecipt,
-} from '@nearpaydev/nearpay-ts-sdk';
+
 import {
   PurchaseErrorMap,
   QueryErrorMap,
@@ -25,6 +22,12 @@ import {
   ReverseErrorMap,
   SessionErrorMap,
 } from '../models/error_status_map';
+import {
+  ReconciliationBannerList,
+  ReconciliationReceipt,
+  TransactionBannerList,
+  TransactionData,
+} from '@nearpaydev/nearpay-ts-sdk';
 
 export class EmbededNearpay {
   private nearpay = registerPlugin<NearpayPluginDefenetions>('NearpayPlugin');
@@ -36,22 +39,20 @@ export class EmbededNearpay {
     this.savedOptions = options;
   }
 
-  async initialize({
-    onSuccess,
-    onFail,
-  }: {
-    onSuccess: () => {};
-    onFail: () => {};
-  }) {
-    function callback(response: ApiResponse) {
-      if (response.status === 200) {
-        onSuccess && onSuccess();
-      } else {
-        onFail && onFail();
-      }
-    }
+  async initialize() {
+    const data = {
+      authtype: this.savedOptions.authtype,
+      authvalue: this.savedOptions.authvalue,
+      environment: this.savedOptions.environment,
+      locale: this.savedOptions.locale,
+      network_configuration: this.savedOptions.networkConfig,
+      ui_position: this.savedOptions.uiPosition,
+      loading_ui: this.savedOptions.loadingUi,
+      arabic_payment_text: this.savedOptions.arabicPaymentText,
+      english_payment_text: this.savedOptions.englishPaymentText,
+    };
 
-    return await this.callMethod('initialize', this.savedOptions, callback);
+    await this.callMethod('initialize', this.savedOptions);
   }
 
   async purchase({
@@ -61,30 +62,20 @@ export class EmbededNearpay {
     enableReversalUi = true,
     enableUiDismiss = true,
     finishTimeout = 60,
-    transactionUUID,
-    onPurchaseFailed,
-    onPurchaseSuccess,
-  }: EmbededPurchaseOptions) {
+    transactionID,
+  }: EmbededPurchaseOptions): Promise<TransactionData> {
     const data = {
-      amount: amount,
+      amount,
       customer_reference_number: customerReferenceNumber,
-      transaction_uuid: transactionUUID,
-      enableReceiptUi: enableReceiptUi,
+      finishTimeout,
       enableReversal: enableReversalUi,
-      finishTimeout: finishTimeout,
-
+      enableReceiptUi: enableReceiptUi,
       enableUiDismiss: enableUiDismiss,
+      job_id: transactionID,
     };
 
-    function callback(response: ApiResponse) {
-      if (response.status === 200) {
-        onPurchaseSuccess?.(response.receipts! as TransactionRecipt[]);
-      } else {
-        onPurchaseFailed?.(PurchaseErrorMap(response));
-      }
-    }
-    return await this.callMethod('purchase', data, callback);
-    // return await this.nearpay.purchase(options);
+    const res = await this.callMethod('purchase', data);
+    return res.result;
   }
   async refund({
     amount,
@@ -96,32 +87,23 @@ export class EmbededNearpay {
     enableReversalUi,
     enableUiDismiss,
     finishTimeout,
-    transactionUUID,
-    onRefundFailed,
-    onRefundSuccess,
-  }: EmbededRefundOptions) {
+    transactionID,
+  }: EmbededRefundOptions): Promise<TransactionData> {
     const data = {
-      amount: amount,
+      amount,
       original_transaction_uuid: originalTransactionUUID,
+      job_id: transactionID,
       customer_reference_number: customerReferenceNumber,
-      transaction_uuid: transactionUUID,
-      enableReceiptUi: enableReceiptUi,
+      finishTimeout,
       enableReversal: enableReversalUi,
-      enableEditableRefundAmountUi: editableRefundAmountUI,
-      finishTimeout: finishTimeout,
-      adminPin: adminPin,
+      enableReceiptUi: enableReceiptUi,
       enableUiDismiss: enableUiDismiss,
+      enableEditableRefundAmountUi: editableRefundAmountUI,
+      ...(adminPin !== undefined ? { adminPin } : null),
     };
 
-    function callback(response: ApiResponse) {
-      if (response.status === 200) {
-        onRefundSuccess?.(response.receipts! as TransactionRecipt[]);
-      } else {
-        onRefundFailed?.(RefundErrorMap(response));
-      }
-    }
-
-    return await this.callMethod('refund', data, callback);
+    const res = await this.callMethod('refund', data);
+    return res.result;
   }
 
   async reverse({
@@ -129,23 +111,16 @@ export class EmbededNearpay {
     enableReceiptUi,
     enableUiDismiss,
     finishTimeout,
-    onReverseSuccess,
-    onReverseFailed,
-  }: EmbededReverseOptions) {
+  }: EmbededReverseOptions): Promise<TransactionData> {
     const data = {
       original_transaction_uuid: originalTransactionUUID,
-      enableReceiptUi: enableReceiptUi,
-      finishTimeout: finishTimeout,
+      finishTimeout,
       enableUiDismiss: enableUiDismiss,
+      enableReceiptUi: enableReceiptUi,
     };
-    function callback(response: ApiResponse) {
-      if (response.status === 200) {
-        onReverseSuccess?.(response.receipts! as TransactionRecipt[]);
-      } else {
-        onReverseFailed?.(ReverseErrorMap(response));
-      }
-    }
-    return await this.callMethod('reverse', data, callback);
+
+    const res = await this.callMethod('reverse', data);
+    return res.result;
   }
 
   async reconcile({
@@ -153,24 +128,16 @@ export class EmbededNearpay {
     enableReceiptUi,
     enableUiDismiss,
     finishTimeout,
-    onReconcileSuccess,
-    onReconcileFailed,
-  }: EmbededReconcileOptions) {
+  }: EmbededReconcileOptions): Promise<ReconciliationReceipt> {
     const data = {
+      finishTimeout,
       enableReceiptUi: enableReceiptUi,
-      finishTimeout: finishTimeout,
-      adminPin: adminPin,
       enableUiDismiss: enableUiDismiss,
+      ...(adminPin !== undefined ? { adminPin } : null),
     };
 
-    function callback(response: ApiResponse) {
-      if (response.status === 200) {
-        onReconcileSuccess?.(response.receipts! as ReconciliationRecipt[]);
-      } else {
-        onReconcileFailed?.(ReconcileErrorMap(response));
-      }
-    }
-    return await this.callMethod('reconcile', data, callback);
+    const res = await this.callMethod('reconcile', data);
+    return res.result;
   }
 
   async session({
@@ -182,123 +149,94 @@ export class EmbededNearpay {
     onSessionClose,
     onSessionFailed,
     onSessionOpen,
-  }: EmbededSessionOptions) {
+  }: EmbededSessionOptions): Promise<void> {
     const data = {
-      sessionID: sessionID,
-      enableReceiptUi: enableReceiptUi,
-      enableReversal: enableReversalUi,
-      finishTimeout: finishTimeout,
+      sessionID,
+      finishTimeout,
       enableUiDismiss: enableUiDismiss,
+      enableReversal: enableReversalUi,
+      enableReceiptUi: enableReceiptUi,
     };
 
-    function callback(response: ApiResponse) {
-      if (response.status === 200) {
-        onSessionOpen !== undefined &&
-          onSessionOpen(response.receipts as TransactionRecipt[]);
-      } else if (response.status === 500) {
-        onSessionClose !== undefined && onSessionClose(response.session!);
-      } else {
-        onSessionFailed !== undefined &&
-          onSessionFailed(SessionErrorMap(response));
-      }
+    // TODO: change later
+    const res = await this.callMethod('session', data);
+    if (res.status === 200) {
+      onSessionOpen !== undefined &&
+        onSessionOpen(res.receipts as TransactionData);
+    } else if (res.status === 500) {
+      onSessionClose !== undefined && onSessionClose(res.session!);
+    } else {
+      onSessionFailed !== undefined && onSessionFailed(SessionErrorMap(res));
     }
-    return await this.callMethod('session', data, callback);
   }
+
   async logout() {
-    return await this.callMethod('logout', {}, () => {});
+    await this.callMethod('logout', {});
   }
 
   async getTranactionsList({
     limit,
     page,
-    onResult,
-    onFail,
-  }: EmbededGetTransactionsListOptions) {
+    endDate,
+    startDate,
+  }: EmbededGetTransactionsListOptions): Promise<TransactionBannerList> {
     const data = {
       limit,
       page,
+      start_date: startDate?.toISOString(),
+      end_date: endDate?.toISOString(),
     };
 
-    function callback(response: ApiResponse) {
-      if (response.status === 200) {
-        onResult !== undefined && onResult(response.result);
-      } else {
-        onFail !== undefined && onFail(QueryErrorMap(response));
-      }
-    }
-    return await this.callMethod('getTransactions', data, callback);
+    const res = await this.callMethod('getTransactions', data);
+    return res.result;
   }
 
   async getTranaction({
     transactionUUID,
-    onResult,
-    onFail,
-  }: EmbededGetTransactionOptions) {
+  }: EmbededGetTransactionOptions): Promise<TransactionData> {
     const data = {
       transaction_uuid: transactionUUID,
     };
 
-    function callback(response: ApiResponse) {
-      if (response.status === 200) {
-        onResult !== undefined && onResult(response.result);
-      } else {
-        onFail !== undefined && onFail(QueryErrorMap(response));
-      }
-    }
-    return await this.callMethod('getTransaction', data, callback);
+    const res = await this.callMethod('getTransaction', data);
+    return res.result;
   }
 
   async getReconciliationsList({
     limit,
     page,
-    onResult,
-    onFail,
-  }: EmbededGetReconciliationsListOptions) {
+    endDate,
+    startDate,
+  }: EmbededGetReconciliationsListOptions): Promise<ReconciliationBannerList> {
     const data = {
       limit,
       page,
+      start_date: startDate?.toISOString(),
+      end_date: endDate?.toISOString(),
     };
 
-    function callback(response: ApiResponse) {
-      if (response.status === 200) {
-        onResult !== undefined && onResult(response.result);
-      } else {
-        onFail !== undefined && onFail(QueryErrorMap(response));
-      }
-    }
-    return await this.callMethod('getReconciliations', data, callback);
+    const res = await this.callMethod('getReconciliations', data);
+    return res.result;
   }
 
   async getReconciliation({
     reconciliationUUID,
-    onResult,
-    onFail,
-  }: EmbededGetReconciliationOptions) {
+  }: EmbededGetReconciliationOptions): Promise<ReconciliationReceipt> {
     const data = {
       reconciliation_uuid: reconciliationUUID,
     };
 
-    function callback(response: ApiResponse) {
-      if (response.status === 200) {
-        onResult !== undefined && onResult(response.result);
-      } else {
-        onFail !== undefined && onFail(QueryErrorMap(response));
-      }
-    }
-    return await this.callMethod('getReconciliation', data, callback);
+    const res = await this.callMethod('getReconciliation', data);
+    return res.result;
   }
 
-  private async callMethod(
-    name: keyof NearpayPluginDefenetions,
-    options: any,
-    callback: (response: ApiResponse) => void,
-  ) {
-    console.log({
-      name,
-      options,
-      callback,
-    });
-    return await this.nearpay[name](options, callback);
+  private async callMethod(name: keyof NearpayPluginDefenetions, options: any) {
+    const res = await this.nearpay[name](options);
+    if (res.status >= 200 && res.status < 300) {
+      return res;
+    } else {
+      throw res;
+    }
   }
 }
 
@@ -309,23 +247,22 @@ class NearpayProxy {
   ) {}
 
   async showConnection() {
-    return await this.callMethod('proxyShowConnection', {}, () => {});
+    return await this.callMethod('proxyShowConnection', {});
   }
 
   async disconnect() {
-    return await this.callMethod('proxyDisconnect', {}, () => {});
+    return await this.callMethod('proxyDisconnect', {});
   }
 
-  private async callMethod(
+  protected async callMethod(
     name: keyof NearpayPluginDefenetions,
     options: any,
-    callback: (response: ApiResponse) => void,
   ) {
-    console.log({
-      name,
-      options,
-      callback,
-    });
-    return await this.plugin[name](options, callback);
+    const res = await this.plugin[name](options);
+    if (res.status >= 200 && res.status < 300) {
+      return res;
+    } else {
+      throw res;
+    }
   }
 }

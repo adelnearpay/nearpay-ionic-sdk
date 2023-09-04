@@ -16,10 +16,12 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.nearpay.ionic.plugin.nearpay.PluginProvider;
-import io.nearpay.ionic.plugin.nearpay.operations.BaseOperation;
-import io.nearpay.ionic.plugin.nearpay.operations.OperatorFactory;
-import io.nearpay.ionic.plugin.nearpay.sender.NearpaySender;
+import io.nearpay.ionic.plugin.common.PluginProvider;
+import io.nearpay.ionic.plugin.common.filter.ArgsFilter;
+import io.nearpay.ionic.plugin.common.operations.BaseOperation;
+import io.nearpay.ionic.plugin.common.operations.OperatorFactory;
+import io.nearpay.ionic.plugin.common.sender.NearpaySender;
+
 
 @CapacitorPlugin(name = "NearpayPlugin")
 public class NearpayPluginPlugin extends Plugin {
@@ -47,7 +49,7 @@ public class NearpayPluginPlugin extends Plugin {
         call.resolve(ret);
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void test(PluginCall call) {
         System.out.println("=-=-=-=-=-=-=-=-=-= method call =-=-=-=-=-=-=-=-=-==-");
         System.out.println("=-=-=-=-=-=-=-=-=-= method call options =-=-=-=-=-=-=-=-=-==-");
@@ -65,85 +67,85 @@ public class NearpayPluginPlugin extends Plugin {
     }
 
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void initialize(PluginCall call) {
         runOperation("initialize", call);
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void setup(PluginCall call) {
         runOperation("setup", call);
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void purchase(PluginCall call) {
         runOperation("purchase", call);
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void refund(PluginCall call) {
         runOperation("refund", call);
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void reverse(PluginCall call) {
         runOperation("reverse", call);
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void reconcile(PluginCall call) {
         runOperation("reconcile", call);
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void getTransactions(PluginCall call) {
         runOperation("getTransactions", call);
     }
 
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void getTransaction(PluginCall call) {
         runOperation("getTransaction", call);
     }
 
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void getReconciliations(PluginCall call) {
         runOperation("getReconciliations", call);
     }
 
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void getReconciliation(PluginCall call) {
         runOperation("getReconciliation", call);
     }
 
 
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void session(PluginCall call) {
         runOperation("session", call);
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void logout(PluginCall call) {
         runOperation("logout", call);
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void proxyShowConnection(PluginCall call) {
         runOperation("proxyShowConnection", call);
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
+    @PluginMethod()
     public void proxyDisconnect(PluginCall call) {
         runOperation("proxyDisconnect", call);
     }
 
     private void runOperation(String opName, PluginCall call){
-        call.setKeepAlive(true);
+//        call.setKeepAlive(true);
         Map<String, Object> args = new Gson().fromJson(call.getData().toString(), HashMap.class);
-        provider.getArgsFilter().filter(args);
+        ArgsFilter filter = new ArgsFilter(args);
 
         BaseOperation operation = operatorFactory.getOperation(opName)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Operation"));
@@ -157,7 +159,7 @@ public class NearpayPluginPlugin extends Plugin {
             }
             call.resolve(toSend);
         };
-        operation.run(args, sender);
+        operation.run(filter, sender);
     }
 
 }

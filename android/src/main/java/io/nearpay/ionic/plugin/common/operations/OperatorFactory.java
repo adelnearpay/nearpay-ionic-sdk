@@ -1,4 +1,4 @@
-package io.nearpay.ionic.plugin.nearpay.operations;
+package io.nearpay.ionic.plugin.common.operations;
 
 import android.os.Build;
 
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import io.nearpay.ionic.plugin.nearpay.PluginProvider;
+import io.nearpay.ionic.plugin.common.PluginProvider;
 
 public class OperatorFactory {
     private PluginProvider provider;
@@ -28,14 +28,12 @@ public class OperatorFactory {
         map.put("logout", new LogoutOperation(provider));
         map.put("setup", new SetupOperation(provider));
         map.put("session", new SessionOperation(provider));
+        map.put("updateAuthentication", new UpdateAuthOperation(provider));
         map.put("getReconciliation", new GetReconciliationOperation(provider));
-        map.put("getReconciliations", new GetReconciliationsPageOperation(provider));
+        map.put("getReconciliationsList", new GetReconciliationsPageOperation(provider));
         map.put("getTransaction", new GetTransactionOperation(provider));
-        map.put("getTransactions", new GetTransactionPageOperation(provider));
-
-        map.put("proxyShowConnection", new ProxyShowConnectOperation(provider));
-        map.put("proxyDisconnect", new ProxyDisconnectOperation(provider));
-
+        map.put("getTransactionsList", new GetTransactionPageOperation(provider));
+        map.put("receiptToImage", new ReceiptToImageOperation(provider));
         // more operators
 
         return map;

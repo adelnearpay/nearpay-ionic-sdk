@@ -1,4 +1,4 @@
-package io.nearpay.ionic.plugin.nearpay.operations;
+package io.nearpay.ionic.plugin.common.operations;
 
 public enum OperationENUM {
     purchase,

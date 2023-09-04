@@ -20,17 +20,28 @@ export type {
   ConnectorInfo,
   PurchaseOptions,
   ReconcileOptions,
-  ReconciliationRecipt,
   RefundOptions,
-  TransactionRecipt,
   WsConnectionInfo,
   RemotePurchaseResponse,
   RemoteRefundResponse,
   RemoteReconciliationResponse,
   RemoteReversalResponse,
   ReversalOptions,
+  TransactionBanner,
+  TransactionBannerList,
+  ReconciliationBanner,
+  ReconciliationBannerList,
+  ReconciliationReceipt,
+  TransactionData,
+  TransactionReceipt,
 } from '@nearpaydev/nearpay-ts-sdk';
-export { AuthenticationType, Environments, Locale } from './definitions';
+export {
+  AuthenticationType,
+  Environments,
+  Locale,
+  NetworkConfig,
+  UIPosition,
+} from './definitions';
 export type {
   EmbededPurchaseOptions,
   EmbededReconcileOptions,

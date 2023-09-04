@@ -1,7 +1,4 @@
-import {
-  ReconciliationRecipt,
-  TransactionRecipt,
-} from '@nearpaydev/nearpay-ts-sdk';
+import { SessionData, TransactionData } from '@nearpaydev/nearpay-ts-sdk';
 import {
   PurchaseError,
   QueryError,
@@ -10,7 +7,6 @@ import {
   ReverseError,
   SessionError,
 } from './models/errors';
-import { SessionType } from './models/Session';
 
 export enum Environments {
   sandbox = 'sandbox',
@@ -32,26 +28,54 @@ export enum Locale {
 export type EmbededInitializeOptions = {
   authtype: AuthenticationType;
   authvalue: string;
-  locale?: Locale;
   environment: Environments;
+  locale?: Locale;
+  networkConfig?: NetworkConfig;
+  arabicPaymentText?: string;
+  englishPaymentText?: string;
+  uiPosition?: UIPosition;
+  loadingUi?: boolean;
 };
+
+export enum NetworkConfig {
+  SIM_ONLY = 'SIM_ONLY',
+  SIM_PREFERRED = 'SIM_PREFERRED',
+  DEFAULT = 'DEFAULT',
+}
+
+export enum UIPosition {
+  TOP_START = 'TOP_START',
+  TOP_END = 'TOP_END',
+  TOP_RIGHT = 'TOP_RIGHT',
+  TOP_LEFT = 'TOP_LEFT',
+  BOTTOM_START = 'BOTTOM_START',
+  BOTTOM_END = 'BOTTOM_END',
+  BOTTOM_RIGHT = 'BOTTOM_RIGHT',
+  BOTTOM_LEFT = 'BOTTOM_LEFT',
+  CENTER_START = 'CENTER_START',
+  CENTER_END = 'CENTER_END',
+  CENTER_RIGHT = 'CENTER_RIGHT',
+  CENTER_LEFT = 'CENTER_LEFT',
+  CENTER_TOP = 'CENTER_TOP',
+  CENTER_BOTTOM = 'CENTER_BOTTOM',
+  CENTER = 'CENTER',
+  DEFAULT = 'DEFAULT',
+}
 
 export type EmbededPurchaseOptions = {
   amount: number;
-  transactionUUID?: string;
+  transactionID?: string;
   customerReferenceNumber?: string;
   enableReceiptUi?: boolean;
   enableReversalUi?: boolean;
   enableUiDismiss?: boolean;
   finishTimeout?: number;
-  onPurchaseSuccess?: (receipts: TransactionRecipt[]) => void;
-  onPurchaseFailed?: (error: PurchaseError) => void;
 };
 
 export type EmbededRefundOptions = {
   amount: number;
   originalTransactionUUID: string;
-  transactionUUID?: string;
+  transactionID?: string;
   customerReferenceNumber?: string;
   enableReceiptUi?: boolean;
   enableReversalUi?: boolean;
@@ -59,8 +83,6 @@ export type EmbededRefundOptions = {
   enableUiDismiss?: boolean;
   finishTimeout?: number;
   adminPin?: string;
-  onRefundSuccess?: (receipts: TransactionRecipt[]) => void;
-  onRefundFailed?: (error: RefundError) => void;
 };
 
 export type EmbededReconcileOptions = {
@@ -68,8 +90,6 @@ export type EmbededReconcileOptions = {
   finishTimeout?: number;
   adminPin?: string;
   enableUiDismiss?: boolean;
-  onReconcileSuccess?: (receipts: ReconciliationRecipt[]) => void;
-  onReconcileFailed?: (error: ReconcileError) => void;
 };
 
 export type EmbededReverseOptions = {
@@ -77,8 +97,6 @@ export type EmbededReverseOptions = {
   enableReceiptUi?: boolean;
   finishTimeout?: number;
   enableUiDismiss?: boolean;
-  onReverseSuccess?: (receipts: TransactionRecipt[]) => void;
-  onReverseFailed?: (error: ReverseError) => void;
 };
 
 export type EmbededSessionOptions = {
@@ -87,50 +105,46 @@ export type EmbededSessionOptions = {
   enableReversalUi?: boolean;
   finishTimeout?: number;
   enableUiDismiss?: boolean;
-  onSessionOpen?: (receipts: TransactionRecipt[]) => void;
-  onSessionClose?: (session: SessionType) => void;
+  onSessionOpen?: (receipts: TransactionData) => void;
+  onSessionClose?: (session: SessionData) => void;
   onSessionFailed?: (error: SessionError) => void;
 };
 
 export type EmbededGetTransactionsListOptions = {
   page?: number;
   limit?: number;
-  onResult?: (bannerList: any) => any;
-  onFail?: (error: QueryError) => any;
+  startDate?: Date;
+  endDate?: Date;
 };
 
 export type EmbededGetTransactionOptions = {
   transactionUUID: string;
-  onResult?: (receipt: any[]) => any;
-  onFail?: (error: QueryError) => any;
 };
 
 export type EmbededGetReconciliationsListOptions = {
   page?: number;
   limit?: number;
-  onResult?: (receipt: any) => any;
-  onFail?: (error: QueryError) => any;
+  startDate?: Date;
+  endDate?: Date;
 };
 
 export type EmbededGetReconciliationOptions = {
   reconciliationUUID: string;
-  onResult?: (receipt: any) => any;
-  onFail?: (error: QueryError) => any;
 };
 
 export type NearpayPluginDefenetions = {
   initialize: (options: EmbededInitializeOptions) => Promise<any>;
-  setup: (options: any, callback: any) => Promise<any>;
-  purchase: (options: any, callback: any) => Promise<any>;
-  reverse: (options: any, callback: any) => Promise<any>;
-  refund: (options: any, callback: any) => Promise<any>;
-  reconcile: (options: any, callback: any) => Promise<any>;
-  logout: (options: any, callback: any) => Promise<any>;
-  session: (options: any, callback: any) => Promise<any>;
-  getTransactions: (options: any, callback: any) => Promise<any>;
-  getTransaction: (options: any, callback: any) => Promise<any>;
-  getReconciliations: (options: any, callback: any) => Promise<any>;
-  getReconciliation: (options: any, callback: any) => Promise<any>;
-  proxyShowConnection: (options: any, callback: any) => Promise<void>;
-  proxyDisconnect: (options: any, callback: any) => Promise<void>;
+  setup: (options: any) => Promise<any>;
+  purchase: (options: any) => Promise<any>;
+  reverse: (options: any) => Promise<any>;
+  refund: (options: any) => Promise<any>;
+  reconcile: (options: any) => Promise<any>;
+  logout: (options: any) => Promise<any>;
+  session: (options: any) => Promise<any>;
+  getTransactions: (options: any) => Promise<any>;
+  getTransaction: (options: any) => Promise<any>;
+  getReconciliations: (options: any) => Promise<any>;
+  getReconciliation: (options: any) => Promise<any>;
+  proxyShowConnection: (options: any) => Promise<void>;
+  proxyDisconnect: (options: any) => Promise<void>;
 };
