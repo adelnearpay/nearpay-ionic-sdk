@@ -98,8 +98,8 @@ public class NearpayPluginPlugin extends Plugin {
     }
 
     @PluginMethod()
-    public void getTransactions(PluginCall call) {
-        runOperation("getTransactions", call);
+    public void getTransactionsList(PluginCall call) {
+        runOperation("getTransactionsList", call);
     }
 
 
@@ -110,8 +110,8 @@ public class NearpayPluginPlugin extends Plugin {
 
 
     @PluginMethod()
-    public void getReconciliations(PluginCall call) {
-        runOperation("getReconciliations", call);
+    public void getReconciliationsList(PluginCall call) {
+        runOperation("getReconciliationsList", call);
     }
 
 

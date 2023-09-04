@@ -37,55 +37,48 @@ export default function EmbededNearpayProvider({
     setResults(JSON.stringify(text, null, 2));
   }
 
-  function purchase() {
-    embededNearpay.purchase({
+  async function purchase() {
+    const transactionData = await embededNearpay.purchase({
       amount: 1000,
-      onPurchaseFailed: setText,
-      onPurchaseSuccess: setText,
     });
+
+    setText(transactionData);
   }
 
-  function purchaseThenRefund() {
-    embededNearpay.purchase({
+  async function purchaseThenRefund() {
+    const transactionData = await embededNearpay.purchase({
       amount: 1000,
-      onPurchaseSuccess: reciepts => {
-        setText(reciepts);
-        const uuid = reciepts[0].transaction_uuid;
-        if (uuid) {
-          embededNearpay.refund({
-            amount: 1000,
-            originalTransactionUUID: uuid,
-            onRefundSuccess: setText,
-            onRefundFailed: setText,
-          });
-        }
-      },
-      onPurchaseFailed: setText,
     });
+
+    const uuid = transactionData.receipts?.[0].transaction_uuid;
+    if (uuid) {
+      const refundTransactionData = embededNearpay.refund({
+        amount: 1000,
+        originalTransactionUUID: uuid,
+      });
+
+      setText(refundTransactionData);
+    }
   }
 
-  function purchaseThenReverse() {
-    embededNearpay.purchase({
+  async function purchaseThenReverse() {
+    const transactionData = await embededNearpay.purchase({
       amount: 1000,
-      onPurchaseSuccess: reciepts => {
-        setText(reciepts);
-        const uuid = reciepts[0].transaction_uuid;
-        if (uuid) {
-          embededNearpay.reverse({
-            originalTransactionUUID: uuid,
-            onReverseFailed: setText,
-            onReverseSuccess: setText,
-          });
-        }
-      },
-      onPurchaseFailed: setText,
     });
+
+    const uuid = transactionData.receipts?.[0].transaction_uuid;
+    if (uuid) {
+      const refundTransactionData = embededNearpay.reverse({
+        originalTransactionUUID: uuid,
+      });
+
+      setText(refundTransactionData);
+    }
   }
-  function reconcile() {
-    embededNearpay.reconcile({
-      onReconcileFailed: setText,
-      onReconcileSuccess: setText,
-    });
+  async function reconcile() {
+    const receipt = await embededNearpay.reconcile({});
+
+    setText(receipt);
   }
 
   function logout() {
@@ -93,34 +86,40 @@ export default function EmbededNearpayProvider({
   }
 
   //  =-=--=-=-=-= query -=-=-=-=-=-=-=
-  function getTransactionsList() {
-    embededNearpay.getTranactionsList({
-      onResult: setText,
-      onFail: setText,
-    });
+  async function getTransactionsList() {
+    const banner = await embededNearpay.getTranactionsList({});
+
+    setText(banner);
   }
 
-  function getTransaction() {
-    embededNearpay.getTranaction({
-      transactionUUID: 'a2fd6519-2b37-4336-be6d-5520bb3b6427',
-      onResult: setText,
-      onFail: setText,
+  async function getTransaction() {
+    const transactionData = await embededNearpay.getTranaction({
+      transactionUUID: '43a78351-ad02-40f1-a15d-e53b9a379d09',
     });
+
+    setText(transactionData);
   }
 
-  function getReconciliationsList() {
-    embededNearpay.getReconciliationsList({
-      onResult: setText,
-      onFail: setText,
+  async function getReconciliationsList() {
+    const startDate = new Date(Date.UTC(2023, 7, 1));
+    const endDate = new Date(Date.now());
+
+    const banner = await embededNearpay.getReconciliationsList({
+      endDate,
+      limit: 20,
+      page: 1,
+      startDate,
     });
+
+    setText(banner);
   }
 
-  function getReconciliation() {
-    embededNearpay.getReconciliation({
-      reconciliationUUID: '6d4a48b8-d194-4aad-92c9-a77606758799',
-      onResult: setText,
-      onFail: setText,
+  async function getReconciliation() {
+    const transactionData = await embededNearpay.getReconciliation({
+      reconciliationUUID: '7d938656-8445-44b6-88a4-4122e8000f5c',
     });
+
+    setText(transactionData);
   }
 
   function proxy_showConnection() {

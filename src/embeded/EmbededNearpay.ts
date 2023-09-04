@@ -187,7 +187,7 @@ export class EmbededNearpay {
       end_date: endDate?.toISOString(),
     };
 
-    const res = await this.callMethod('getTransactions', data);
+    const res = await this.callMethod('getTransactionsList', data);
     return res.result;
   }
 
@@ -215,7 +215,7 @@ export class EmbededNearpay {
       end_date: endDate?.toISOString(),
     };
 
-    const res = await this.callMethod('getReconciliations', data);
+    const res = await this.callMethod('getReconciliationsList', data);
     return res.result;
   }
 
@@ -232,6 +232,9 @@ export class EmbededNearpay {
 
   private async callMethod(name: keyof NearpayPluginDefenetions, options: any) {
     const res = await this.nearpay[name](options);
+
+    console.log({ res });
+
     if (res.status >= 200 && res.status < 300) {
       return res;
     } else {
