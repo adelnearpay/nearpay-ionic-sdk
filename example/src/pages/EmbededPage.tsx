@@ -21,7 +21,7 @@ import {
   EmbededNearpay,
   Environments,
   Locale,
-} from '../../../dist/esm';
+} from '@nearpaydev/nearpay-ionic-sdk';
 
 const nearpay = new EmbededNearpay({
   authtype: AuthenticationType.email,

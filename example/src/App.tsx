@@ -1,8 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { EmbededNearpay } from 'ionic-nearpay-sdk';
-import { AuthenticationType } from 'ionic-nearpay-sdk';
-import { Environments } from 'ionic-nearpay-sdk';
-import { Locale } from 'ionic-nearpay-sdk';
 import {
   IonApp,
   IonRoute,
@@ -30,6 +26,7 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
+import { EmbededNearpay } from '@nearpaydev/nearpay-ionic-sdk';
 
 // console.log('=-=-=-=-=-=-=-=-==- before');
 
